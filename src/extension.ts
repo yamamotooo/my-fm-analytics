@@ -234,9 +234,21 @@ function getFirstElementByTagName(element: Element, tagName: string): Element | 
   return nodes.length > 0 ? nodes.item(0) : null;
 }
 
-/** ファイル名に使えない区切り文字（/、\\）をアンダースコアに置換する。*/
+/** Windows で使えない文字を全角に置換する */
 function escapeFilename(name: string): string {
-  return name.replace(/[\\/]/g, '_');
+  const map: Record<string, string> = {
+    '/': '／',
+    '\\': '＼',
+    ':': '：',
+    '*': '＊',
+    '?': '？',
+    '"': '”',
+    '<': '＜',
+    '>': '＞',
+    '|': '｜'
+  };
+
+  return name.replace(/[\/\\:\*\?"<>|]/g, (c) => map[c] ?? c);
 }
 
 /**
